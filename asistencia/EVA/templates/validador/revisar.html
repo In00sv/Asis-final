@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Revisar Justificación{% endblock %}
+
+{% block content %}
+
+<div class="card shadow p-4">
+
+    <h2 class="mb-4">
+        Revisar Justificación
+    </h2>
+
+
+    <div class="mb-4">
+
+        <p>
+            <strong>Estudiante:</strong>
+            {{ justificacion.usuario.username }}
+        </p>
+
+        <p>
+            <strong>RUT:</strong>
+            {{ justificacion.usuario.rut }}
+        </p>
+
+        <p>
+            <strong>Fecha de inasistencia:</strong>
+            {{ justificacion.fecha_inasistencia }}
+        </p>
+
+        <p>
+            <strong>Motivo:</strong>
+            {{ justificacion.motivo }}
+        </p>
+
+        <p>
+            <strong>Descripción:</strong>
+            {{ justificacion.descripcion|default:"-" }}
+        </p>
+
+
+        {% if justificacion.documento %}
+
+            <p>
+
+                <strong>Documento:</strong>
+
+                <a
+                    href="{{ justificacion.documento.url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Ver documento adjunto
+                </a>
+
+            </p>
+
+        {% else %}
+
+            <p>
+                <strong>Documento:</strong>
+                No adjuntado.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <hr>
+
+
+    <form method="post">
+
+        {% csrf_token %}
+
+
+        {% if form.non_field_errors %}
+
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+
+        {% endif %}
+
+
+        {% for field in form %}
+
+            <div class="mb-3">
+
+                <label
+                    for="{{ field.id_for_label }}"
+                    class="form-label"
+                >
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+
+
+                {% for error in field.errors %}
+
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endfor %}
+
+
+        <button
+            type="submit"
+            class="btn btn-success"
+        >
+            Guardar decisión
+        </button>
+
+
+        <a
+            href="{% url 'panel_validador' %}"
+            class="btn btn-secondary"
+        >
+            Volver
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

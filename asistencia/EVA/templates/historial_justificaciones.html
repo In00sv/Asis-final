@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Historial{% endblock %}
+
+{% block content %}
+
+<div class="card shadow p-4">
+
+    <h2 class="mb-4">
+        Historial de Justificaciones
+    </h2>
+
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Fecha</th>
+
+                    <th>Motivo</th>
+
+                    <th>Estado</th>
+
+                    <th>Comentarios</th>
+
+                    <th>Documento</th>
+
+                    <th>Acciones</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for j in justificaciones %}
+
+                    <tr>
+
+                        <td>
+                            {{ j.fecha_inasistencia }}
+                        </td>
+
+                        <td>
+                            {{ j.motivo }}
+                        </td>
+
+                        <td>
+                            {{ j.get_estado_display }}
+                        </td>
+
+                        <td>
+                            {{ j.comentarios_validador|default:"-" }}
+                        </td>
+
+                        <td>
+
+                            {% if j.documento %}
+
+                                <a
+                                    href="{{ j.documento.url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Ver documento
+                                </a>
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if j.estado == "pendiente" %}
+
+                                <form
+                                    method="post"
+                                    action="{% url 'eliminar_justificacion' j.pk %}"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-danger"
+                                    >
+                                        Eliminar
+                                    </button>
+
+                                </form>
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="text-center"
+                        >
+                            No tienes justificaciones registradas.
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <a
+        class="btn btn-secondary mt-3"
+        href="{% url 'home' %}"
+    >
+        Volver al inicio
+    </a>
+
+</div>
+
+{% endblock %}

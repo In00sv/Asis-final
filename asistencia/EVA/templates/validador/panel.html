@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Panel Validador{% endblock %}
+
+{% block content %}
+
+<div class="card shadow p-4">
+
+    <h2 class="mb-4">
+        Panel del Validador
+    </h2>
+
+    <p>
+        Justificaciones pendientes de revisión.
+    </p>
+
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>Estudiante</th>
+
+                    <th>Fecha</th>
+
+                    <th>Motivo</th>
+
+                    <th>Fecha envío</th>
+
+                    <th>Acción</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for j in justificaciones %}
+
+                    <tr>
+
+                        <td>
+                            {{ j.usuario.username }}
+                        </td>
+
+                        <td>
+                            {{ j.fecha_inasistencia }}
+                        </td>
+
+                        <td>
+                            {{ j.motivo }}
+                        </td>
+
+                        <td>
+                            {{ j.fecha_envio }}
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'revisar_justificacion' j.pk %}"
+                                class="btn btn-primary btn-sm"
+                            >
+                                Revisar
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="text-center"
+                        >
+                            No existen justificaciones pendientes.
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <a
+        href="{% url 'home' %}"
+        class="btn btn-secondary mt-3"
+    >
+        Volver al inicio
+    </a>
+
+</div>
+
+{% endblock %}

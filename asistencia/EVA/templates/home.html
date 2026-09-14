@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+
+<div class="card shadow p-4">
+
+    <h2 class="mb-2">
+        Bienvenido, {{ user.username }}
+    </h2>
+
+    <p class="text-muted">
+        Perfil: {{ user.get_rol_display }}
+    </p>
+
+
+    {% if user.rol == "estudiante" %}
+
+        <div class="list-group">
+
+            <a
+                href="{% url 'justificar_inasistencia' %}"
+                class="list-group-item list-group-item-action"
+            >
+                Justificar Inasistencia
+            </a>
+
+            <a
+                href="{% url 'historial_justificaciones' %}"
+                class="list-group-item list-group-item-action"
+            >
+                Ver Historial de Justificaciones
+            </a>
+
+        </div>
+
+    {% elif user.rol == "validador" %}
+
+        <div class="list-group">
+
+            <a
+                href="{% url 'panel_validador' %}"
+                class="list-group-item list-group-item-action"
+            >
+                Revisar Justificaciones
+            </a>
+
+        </div>
+
+    {% elif user.rol == "receptor" %}
+
+        <div class="list-group">
+
+            <a
+                href="{% url 'panel_receptor' %}"
+                class="list-group-item list-group-item-action"
+            >
+                Gestionar Asistencia
+            </a>
+
+            <a
+                href="{% url 'registrar_asistencia' %}"
+                class="list-group-item list-group-item-action"
+            >
+                Registrar Asistencia
+            </a>
+
+        </div>
+
+    {% endif %}
+
+
+    <hr>
+
+
+    <form
+        method="post"
+        action="{% url 'logout' %}"
+    >
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn btn-danger"
+        >
+            Cerrar Sesión
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
